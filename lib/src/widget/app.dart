@@ -31,13 +31,13 @@ class NeumorphicApp extends StatelessWidget {
   final bool checkerboardRasterCacheImages;
   final bool checkerboardOffscreenLayers;
   final bool showSemanticsDebugger;
-  final Map<LogicalKeySet, Intent>? shortcuts;
+  final Map<ShortcutActivator, Intent>? shortcuts; // Updated type
   final Map<Type, Action<Intent>>? actions;
 
   final bool debugShowMaterialGrid;
 
   const NeumorphicApp({
-    Key? key,
+    super.key, // Updated to use super parameter
     this.title = '',
     this.color,
     this.initialRoute,
@@ -70,7 +70,7 @@ class NeumorphicApp extends StatelessWidget {
     this.debugShowMaterialGrid = false,
     this.shortcuts,
     this.actions,
-  }) : super(key: key);
+  });
 
   ThemeData _getMaterialTheme(NeumorphicThemeData theme) {
     final color = theme.accentColor;
@@ -81,20 +81,24 @@ class NeumorphicApp extends StatelessWidget {
         textTheme: theme.textTheme,
         iconTheme: theme.iconTheme,
         scaffoldBackgroundColor: theme.baseColor,
+        useMaterial3: true, // Enable Material 3
       );
     }
 
     return ThemeData(
       primaryColor: theme.accentColor,
-      accentColor: theme.variantColor,
       iconTheme: theme.iconTheme,
       brightness: ThemeData.estimateBrightnessForColor(theme.baseColor),
-      primaryColorBrightness:
-          ThemeData.estimateBrightnessForColor(theme.accentColor),
-      accentColorBrightness:
-          ThemeData.estimateBrightnessForColor(theme.variantColor),
       textTheme: theme.textTheme,
       scaffoldBackgroundColor: theme.baseColor,
+      useMaterial3: true, // Enable Material 3
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: theme.accentColor,
+        brightness: ThemeData.estimateBrightnessForColor(theme.baseColor),
+      ).copyWith(
+        secondary: theme.variantColor,
+        surface: theme.baseColor,
+      ),
     );
   }
 

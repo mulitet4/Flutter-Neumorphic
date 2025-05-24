@@ -10,8 +10,8 @@ homepage: https://github.com/Idean/Flutter-Neumorphic
 issue_tracker: https://github.com/Idean/Flutter-Neumorphic/issues
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
-  flutter: ">=1.13.18"
+  sdk: ">=3.0.0 <4.0.0" # Updated for Flutter 3.10+ compatibility
+  flutter: ">=3.10.0" # Minimum Flutter version for 3.10+ features
 
 dependencies:
   flutter:
@@ -20,9 +20,10 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^3.0.0 # Added modern linting rules
 
 flutter:
   fonts:
-   - family: NeumorphicIcons
-     fonts:
-      - asset: fonts/NeumorphicIcons.ttf
+    - family: NeumorphicIcons
+      fonts:
+        - asset: fonts/NeumorphicIcons.ttf

@@ -59,34 +59,36 @@ class Neumorphic extends StatelessWidget {
   final bool
       drawSurfaceAboveChild; //if true => boxDecoration & foreground decoration, else => boxDecoration does all the work
 
-  Neumorphic({
-    Key? key,
+  const Neumorphic({
+    // Added const constructor
+    super.key, // Updated to use super parameter
     this.child,
-    this.duration = Neumorphic.DEFAULT_DURATION,
-    this.curve = Neumorphic.DEFAULT_CURVE,
+    this.duration = Neumorphic.DEFAULT_DURATION, // Updated reference
+    this.curve = Neumorphic.DEFAULT_CURVE, // Updated reference
     this.style,
     this.textStyle,
     this.margin = const EdgeInsets.all(0),
     this.padding = const EdgeInsets.all(0),
     this.drawSurfaceAboveChild = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = NeumorphicTheme.currentTheme(context);
-    final NeumorphicStyle style = (this.style ?? NeumorphicStyle())
-        .copyWithThemeIfNull(theme)
-        .applyDisableDepth();
+    final NeumorphicStyle style =
+        (this.style ?? const NeumorphicStyle()) // Added const
+            .copyWithThemeIfNull(theme)
+            .applyDisableDepth();
 
     return _NeumorphicContainer(
-      padding: this.padding,
-      textStyle: this.textStyle,
-      drawSurfaceAboveChild: this.drawSurfaceAboveChild,
-      duration: this.duration,
+      padding: padding, // Removed this. prefix for cleaner code
+      textStyle: textStyle,
+      drawSurfaceAboveChild: drawSurfaceAboveChild,
+      duration: duration,
       style: style,
-      curve: this.curve,
-      margin: this.margin,
-      child: this.child,
+      curve: curve,
+      margin: margin,
+      child: child,
     );
   }
 }
@@ -101,8 +103,9 @@ class _NeumorphicContainer extends StatelessWidget {
   final bool drawSurfaceAboveChild;
   final EdgeInsets padding;
 
-  _NeumorphicContainer({
-    Key? key,
+  const _NeumorphicContainer({
+    // Added const constructor
+    super.key, // Updated to use super parameter
     this.child,
     this.textStyle,
     required this.padding,
@@ -111,38 +114,40 @@ class _NeumorphicContainer extends StatelessWidget {
     required this.curve,
     required this.style,
     required this.drawSurfaceAboveChild,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    final shape = this.style.boxShape ?? NeumorphicBoxShape.rect();
+    final shape = style.boxShape ??
+        const NeumorphicBoxShape.rect(); // Added const and removed this.
 
     return DefaultTextStyle(
-      style: this.textStyle ?? material.Theme.of(context).textTheme.bodyText2!,
+      style: textStyle ??
+          material.Theme.of(context).textTheme.bodyMedium!, // Removed this.
       child: AnimatedContainer(
-        margin: this.margin,
-        duration: this.duration,
-        curve: this.curve,
-        child: NeumorphicBoxShapeClipper(
+        margin: margin, // Removed this.
+        duration: duration, // Removed this.
+        curve: curve, // Removed this.
+        decoration: NeumorphicDecoration(
+          isForeground: false,
+          renderingByPath: shape.customShapePathProvider.oneGradientPerPath,
+          splitBackgroundForeground: drawSurfaceAboveChild, // Removed this.
+          style: style, // Removed this.
           shape: shape,
-          child: Padding(
-            padding: this.padding,
-            child: this.child,
-          ),
         ),
         foregroundDecoration: NeumorphicDecoration(
           isForeground: true,
           renderingByPath: shape.customShapePathProvider.oneGradientPerPath,
-          splitBackgroundForeground: this.drawSurfaceAboveChild,
-          style: this.style,
+          splitBackgroundForeground: drawSurfaceAboveChild, // Removed this.
+          style: style, // Removed this.
           shape: shape,
         ),
-        decoration: NeumorphicDecoration(
-          isForeground: false,
-          renderingByPath: shape.customShapePathProvider.oneGradientPerPath,
-          splitBackgroundForeground: this.drawSurfaceAboveChild,
-          style: this.style,
+        child: NeumorphicBoxShapeClipper(
           shape: shape,
+          child: Padding(
+            padding: padding, // Removed this.
+            child: child, // Removed this.
+          ),
         ),
       ),
     );

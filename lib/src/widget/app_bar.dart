@@ -81,8 +81,8 @@ class NeumorphicAppBar extends StatefulWidget implements PreferredSizeWidget {
 
   final double padding;
 
-  NeumorphicAppBar({
-    Key? key,
+  const NeumorphicAppBar({
+    super.key, // Updated to use super parameter
     this.title,
     this.buttonPadding,
     this.buttonStyle,
@@ -96,15 +96,15 @@ class NeumorphicAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.titleSpacing = NavigationToolbar.kMiddleSpacing,
     this.actionSpacing = defaultSpacing,
     this.padding = 16,
-  })  : preferredSize = Size.fromHeight(toolbarHeight),
-        super(key: key);
+  }) : preferredSize = const Size.fromHeight(toolbarHeight); // Added const
 
   @override
   NeumorphicAppBarState createState() => NeumorphicAppBarState();
 
   bool _getEffectiveCenterTitle(ThemeData theme, NeumorphicThemeData nTheme) {
-    if (centerTitle != null || nTheme.appBarTheme.centerTitle != null)
+    if (centerTitle != null || nTheme.appBarTheme.centerTitle != null) {
       return centerTitle ?? nTheme.appBarTheme.centerTitle!;
+    }
     switch (theme.platform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
@@ -119,9 +119,8 @@ class NeumorphicAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class NeumorphicAppBarTheme extends InheritedWidget {
-  final Widget child;
-
-  NeumorphicAppBarTheme({required this.child}) : super(child: child);
+  const NeumorphicAppBarTheme(
+      {super.key, required super.child}); // Updated constructor
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) {
@@ -129,7 +128,7 @@ class NeumorphicAppBarTheme extends InheritedWidget {
   }
 
   static NeumorphicAppBarTheme? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType();
+    return context.dependOnInheritedWidgetOfExactType<NeumorphicAppBarTheme>();
   }
 }
 
@@ -157,7 +156,7 @@ class NeumorphicAppBarState extends State<NeumorphicAppBar> {
           tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
         );
       } else {
-        if (canPop)
+        if (canPop) {
           leading = useCloseButton
               ? NeumorphicCloseButton(
                   padding: widget.buttonPadding,
@@ -167,6 +166,7 @@ class NeumorphicAppBarState extends State<NeumorphicAppBar> {
                   padding: widget.buttonPadding,
                   style: widget.buttonStyle,
                 );
+        }
       }
     }
     if (leading != null) {
@@ -180,8 +180,9 @@ class NeumorphicAppBarState extends State<NeumorphicAppBar> {
     if (title != null) {
       final AppBarTheme appBarTheme = AppBarTheme.of(context);
       title = DefaultTextStyle(
-        style: (appBarTheme.textTheme?.headline5 ??
-                Theme.of(context).textTheme.headline5!)
+        style: (appBarTheme
+                    .titleTextStyle ?? // Updated from textTheme?.headline5
+                Theme.of(context).textTheme.headlineSmall!)
             .merge(widget.textStyle ?? nTheme?.current?.appBarTheme.textStyle),
         softWrap: false,
         overflow: TextOverflow.ellipsis,
